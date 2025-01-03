@@ -1,0 +1,33 @@
+# docker network create pg_network
+version: "3.8"
+services:
+  postgres-db:
+    image: postgres
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd123.
+      POSTGRES_DB: NeutrinoDbCore
+    ports:
+      - "5432:5432"
+    networks:
+      - martix_net
+    volumes:
+      - pgdata:/var/lib/postgresql/data # sudo chmod -R 775 ./data && sudo chown -R $(whoami):staff ./data/
+  
+  adminer:
+    container_name: pg-adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - martix_net
+
+networks:
+  martix_net:
+    external: true
+
+volumes:
+  pgdata:
+    driver: local
